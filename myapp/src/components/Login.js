@@ -12,6 +12,7 @@ function Login() {
   const [password, setPassword] = useState("");
 
   /**
+   * Handles controlled input values
    *
    * @param {object} e - Accepts the event
    */
@@ -28,6 +29,7 @@ function Login() {
       <h3 style={{ fontWeight: 300, fontSize: "35px", color: "gray" }}>
         Login
       </h3>
+
       <input
         className={styles.input}
         type="text"
