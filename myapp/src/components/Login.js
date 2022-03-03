@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "../styles/Login.module.css";
+import validateEmail from "../utilities/validateEmail";
+import Button from "./Button";
 
 /**
  * Login Component
@@ -10,6 +13,8 @@ import styles from "../styles/Login.module.css";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   /**
    * Handles controlled input values
@@ -22,6 +27,14 @@ function Login() {
     if (target.name === "email") {
       setEmail(target.value);
     } else setPassword(target.value);
+  };
+
+  const handleSubmit = () => {
+    if (validateEmail(email) && password === "meld123") {
+      navigate("/devices");
+    } else {
+      setError("Email or Password is incorrect!");
+    }
   };
 
   return (
@@ -51,7 +64,14 @@ function Login() {
           handleChange(e);
         }}
       />
-      <button className={styles.button}>Log in</button>
+      {error.length > 1 && <p className={styles.error}>{error}</p>}
+      <Button
+        className={styles.button}
+        onClick={handleSubmit}
+        style={{ marginBottom: "10px" }}
+      >
+        Log in
+      </Button>
     </div>
   );
 }

@@ -1,0 +1,18 @@
+.container {
+  background-color: #ff7043;
+  height: 100%;
+  width: 100%;
+}
+
+.body {
+  height: 92%;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #d76845;
+  height: 8%;
+}

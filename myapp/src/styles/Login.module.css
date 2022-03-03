@@ -1,6 +1,6 @@
 .form {
   background-color: white;
-  height: 40%;
+  min-height: 40%;
   width: 20%;
   display: flex;
   align-items: center;
@@ -22,7 +22,7 @@
   cursor: pointer;
   border: none;
   border-radius: 3px;
-  margin-top: 20px;
+  margin-top: 10px;
   text-transform: uppercase;
 }
 
@@ -30,4 +30,8 @@
   transition: all 1s;
   position: relative;
   top: 1px;
+}
+
+.error {
+  color: red;
 }
