@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/Login.module.css";
 import validateEmail from "../utilities/validateEmail";
@@ -15,10 +15,8 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState();
   const navigate = useNavigate();
-
-  let unMounted = false;
 
   /**
    * Handles controlled input values
@@ -33,13 +31,6 @@ function Login() {
     } else setPassword(target.value);
   };
 
-  useEffect(() => {
-    return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      unMounted = true;
-    };
-  });
-
   const handleSubmit = async () => {
     if (validateEmail(email) && password.length > 1) {
       // Creating body for POST request
@@ -49,11 +40,9 @@ function Login() {
       };
 
       setLoading(true);
-      await postData("http://35.201.2.209:8000/login", bodyData);
+      postData("http://35.201.2.209:8000/login", bodyData);
     } else {
-      if (!unMounted) {
-        setError("Email or Password is incorrect!");
-      }
+      setError("Email or Password is incorrect!");
     }
   };
 
@@ -76,13 +65,13 @@ function Login() {
         setLoading(false);
         setError("");
         // set cookie
-
-        document.cookie = `user=${response.data}`;
+    
+        document.cookie = `meldcxUser=${response.data}`;
         navigate("/devices");
       })
       .catch((err) => {
         setLoading(false);
-        setError("Failed to login!");
+        setError("Failed to Login!");
       });
   }
 

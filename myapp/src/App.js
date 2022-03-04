@@ -1,15 +1,19 @@
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Login from "./components/Login";
 import Devices from "./components/Devices";
+import Login from "./components/Login";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
+  
   return (
     <div className="App">
-      <Routes>
-        <Route path="/" element={<Login/>}></Route>
-        <Route path="/devices" element={<Devices/>}></Route>
-      </Routes>
+      <>
+        <Routes>
+          <Route path="/" element={<Login />}></Route>
+          <Route path="/devices" element={<PrivateRoute component={Devices}/>}></Route>
+        </Routes>
+      </>
     </div>
   );
 }
