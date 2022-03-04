@@ -49,7 +49,8 @@ function Devices() {
   /**
    *
    * @param {string} url
-   * @param {object} bodyData
+   * @param {object} bodyData Request body should be an object
+   * @param {string} token token must be a string
    */
 
   async function notify(url, bodyData, token) {
