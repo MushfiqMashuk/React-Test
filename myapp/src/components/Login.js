@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/Login.module.css";
 import validateEmail from "../utilities/validateEmail";
@@ -13,8 +14,11 @@ import Button from "./Button";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  let unMounted = false;
 
   /**
    * Handles controlled input values
@@ -29,13 +33,58 @@ function Login() {
     } else setPassword(target.value);
   };
 
-  const handleSubmit = () => {
-    if (validateEmail(email) && password === "meld123") {
-      navigate("/devices");
+  useEffect(() => {
+    return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      unMounted = true;
+    };
+  });
+
+  const handleSubmit = async () => {
+    if (validateEmail(email) && password.length > 1) {
+      // Creating body for POST request
+      const bodyData = {
+        email,
+        password,
+      };
+
+      setLoading(true);
+      await postData("http://35.201.2.209:8000/login", bodyData);
     } else {
-      setError("Email or Password is incorrect!");
+      if (!unMounted) {
+        setError("Email or Password is incorrect!");
+      }
     }
   };
+
+  /**
+   *
+   * @param {string} url
+   * @param {object} bodyData
+   */
+
+  async function postData(url, bodyData) {
+    axios({
+      method: "post",
+      url,
+      data: bodyData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        setLoading(false);
+        setError("");
+        // set cookie
+
+        document.cookie = `user=${response.data}`;
+        navigate("/devices");
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError("Failed to login!");
+      });
+  }
 
   return (
     <div className={styles.form}>
@@ -64,11 +113,12 @@ function Login() {
           handleChange(e);
         }}
       />
-      {error.length > 1 && <p className={styles.error}>{error}</p>}
+      {error && <p className={styles.error}>{error}</p>}
       <Button
         className={styles.button}
         onClick={handleSubmit}
         style={{ marginBottom: "10px" }}
+        disabled={loading}
       >
         Log in
       </Button>
